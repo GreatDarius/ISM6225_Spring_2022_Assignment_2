@@ -8,6 +8,8 @@ WRITE YOUR CODE IN THE RESPECTIVE QUESTION FUNCTION BLOCK
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace ISM6225_Assignment_2_Spring_2022
 {
@@ -103,9 +105,9 @@ namespace ISM6225_Assignment_2_Spring_2022
 
             //Question 10:
             Console.WriteLine("Question 10");
-            string word1  = "horse";
+            string word1 = "horse";
             string word2 = "ros";
-            int minLen = MinDistance( word1,  word2);
+            int minLen = MinDistance(word1, word2);
             Console.WriteLine("Minimum number of operations required are {0}", minLen);
             Console.WriteLine();
         }
@@ -133,13 +135,39 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //Write your Code here.
-                return -1;
+                // defining a new array to put target inside it
+                int[] NewNum = new int[] {target};
+                //defining a list to put the result of combining arrays inside it incase we couln't find the target.
+                var mylist = new List<int>();
+                //using binary search to look for target
+                int Result = Array.BinarySearch(nums, target);
+                //if we found the target we return the index of our target
+                if (Result>0)
+                {
+                    return Result;
+                
+                }
+                //else we combine the target with our nums array
+                else
+                {
+                    mylist.AddRange(nums);
+                    mylist.AddRange(NewNum);
+                    //put them inside a list and convert them to array again
+                    int[] CombinedArray = mylist.ToArray();
+                    //sort the new array
+                    Array.Sort(CombinedArray);
+                    //again search for the target and return the index.
+                    Result = Array.BinarySearch(CombinedArray, target);
+                    return Result;
+
+                }
             }
             catch (Exception)
             {
                 throw;
             }
         }
+        //using built in functions like BinarySearch is really helpfull and time saving. 
 
         /*
          
@@ -163,10 +191,51 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                
-                //write your code here.
 
-                return "";
+                StringBuilder ban = new StringBuilder();
+                ban.Append(banned[0]);
+                string res = ban.ToString();
+                // Create Dictionary to store word
+                // and it's frequency
+                Dictionary<String, int> hs = new Dictionary<String, int>();
+                paragraph = paragraph.ToLower();
+                paragraph = paragraph.Replace(",", ""); //Just cleaning up a bit
+                paragraph = paragraph.Replace(".", ""); //Just cleaning up a bit
+                string[] arr = paragraph.Split(' '); //Create an array of words
+
+                // Iterate through array of words
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    // If word already exist in Dictionary
+                    // then increase it's count by 1
+                    if (hs.ContainsKey(arr[i]))
+                    {
+                        hs[arr[i]] = hs[arr[i]] + 1;
+                    }
+
+                    // Otherwise add word to Dictionary
+                    else
+                    {
+                        hs.Add(arr[i], 1);
+                    }
+                }
+
+                // Create set to iterate over Dictionary
+                String key = "";
+                int value = 0;
+                hs.Remove(res);
+                foreach (KeyValuePair<String, int> me in hs)
+                {
+                    // Check for word having highest frequency
+                    if (me.Value > value)
+                    {
+                        value = me.Value;
+                        key = me.Key;
+                    }
+                }
+
+                // Return word having highest frequency
+                return key;
             }
             catch (Exception)
             {
@@ -200,8 +269,48 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
-                return 0;
+
+                // Create Dictionary to store items
+                // and it's frequency
+                Dictionary<int, int> hs = new Dictionary<int, int>();
+
+                // Iterate through array of words
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    // If word already exist in Dictionary
+                    // then increase it's count by 1
+                    if (hs.ContainsKey(arr[i]))
+                    {
+                        hs[arr[i]] = hs[arr[i]] + 1;
+                    }
+
+                    // Otherwise add word to Dictionary
+                    else
+                    {
+                        hs.Add(arr[i], 1);
+                    }
+                }
+
+                // Create set to iterate over Dictionary
+                int key = 0;
+                int value = 0;
+                foreach (KeyValuePair<int, int> me in hs)
+                {
+                    // Check for word having highest frequency
+                    if (me.Value > value && me.Key==me.Value)
+                    {
+                        value = me.Value;
+                        key = me.Key;
+                    }
+                    else
+                    {
+                        key = -1;
+                    }
+                }
+
+                // Return word having highest frequency
+                return key;
+                
             }
             catch (Exception)
             {
@@ -236,7 +345,46 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-                return "";
+                int BullCounter = 0;
+                int CowCounter = 0;
+                int Guess = Convert.ToInt32(guess);
+                int Secret = Convert.ToInt32(secret);
+                int[] GuessArray = new int[4];
+                int[] SecretArray = new int[40];
+                int[] distinctGuess = GuessArray.Distinct().ToArray();
+                int[] distinctSecret = SecretArray.Distinct().ToArray();
+
+                for (int i=0;i<GuessArray.Length;i++)
+                {
+                    GuessArray[i] = Guess % 10;
+                    Guess /= 10;
+                }
+                for (int j = 0; j < SecretArray.Length; j++)
+                {
+                    SecretArray[j] = Secret % 10;
+                    Secret /= 10;
+                }
+                for (int k=0; k<4;k++)
+                {
+                    if(GuessArray[k]==SecretArray[k])
+                    {
+                        BullCounter += 1;
+                    }
+                }
+                for (int l = 0; l < 4; l++)
+                {
+                    for (int m = 0; m < 4; m++)
+                    {
+                        if(GuessArray[m]==SecretArray[l])
+                        {
+                            CowCounter += 1;
+                            break;
+                        }
+                    }
+
+                }
+
+                return (BullCounter+"A"+(CowCounter-BullCounter)+"B");
             }
             catch (Exception)
             {
@@ -266,13 +414,34 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-                
-                return new List<int>() {} ;
+                //Setting up the index based on position of alphabet
+                int[] LastIndex = new int[26];
+                for (int i =0; i<s.Length;i++)
+                {
+                    LastIndex[s[i] - 'a'] = i;
+                }
+                int j = 0;
+                int Start = 0;
+                List<int> Result = new List<int>();
+                //
+                for(int i= 0; i<s.Length; i++)
+                {   
+                    //Updating j
+                    j = Math.Max(j, LastIndex[s[i] - 'a']);
+                    //If i equals j it means that we are done with our partition i
+                    if (i == j)
+                    {
+                        Result.Add(i - Start + 1);
+                        Start = i + 1;
+                    }
+                }
+                return Result ;
             }
             catch (Exception)
             {
                 throw;
             }
+            //Intresting problem with strings. At first it looked really hard to me but by taking some time to think about it it was really fun solving it
         }
 
         /*
@@ -311,14 +480,43 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-
-                return new List<int>() { };
+                //Putting string input in an array as Character.
+                char[] Input = new char[s.Length];
+                Input = s.ToCharArray();
+                //Creating an array of all 26 Alphabets.
+                char[] Alphabets = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+                //Defining variables for getting the line numbers and the leftover pixels
+                int SumOfWidth = 0;
+                int LineCounter = 1;
+                //Using 2 loops we can check our inputs against the Alphabets
+                for (int j = 0; j < Input.Length; j++)
+                {
+                    for (int i = 0; i < Alphabets.Length; i++)
+                    {
+                        //If the input caracter is equal to one of the alphabets
+                        if (Input[j] == Alphabets[i])
+                        {
+                            //We will sum up the width with other alohabet width
+                            SumOfWidth += widths[i];
+                            //Check to see if Our width is greater than 100 (one line) or not
+                            if (SumOfWidth>100)
+                            {
+                                //If so we will add one to our linecounter and zero our Sum
+                                LineCounter += 1;
+                                SumOfWidth = 0;
+                                SumOfWidth += widths[i];
+                            }
+                        }                       
+                    }
+                }
+                //Returning the number of the lines with left over width
+                return new List<int>() {LineCounter,SumOfWidth };
             }
             catch (Exception)
             {
                 throw;
             }
-
+            //It took me 30 minutes to write this code and It helped me learn more about if statement inside for in different way.
         }
 
 
@@ -350,15 +548,49 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-
-                return false;
+                //Creating a stack to insert our inputs in it.
+                Stack<char> FirstSymbols = new Stack<char>();
+                // Loop for each character of the string
+                for (int i = 0; i < bulls_string10.Length; i++)
+                {
+                    // If left symbol is encountered
+                    if (bulls_string10[i] == '(' || bulls_string10[i] == '{' || bulls_string10[i] == '[')
+                    {
+                        //We will insert it inside our stack
+                        FirstSymbols.Push(bulls_string10[i]);
+                    }
+                    // If right symbol is encountered ")"
+                    else if (bulls_string10[i] == ')' && FirstSymbols.Count != 0 && FirstSymbols.Contains( '(' ))
+                    {
+                        //If it was equal to the top element of stack we will pop it
+                        FirstSymbols.Pop();
+                    }
+                    // If right symbol is encountered "}"
+                    else if (bulls_string10[i] == '}' && FirstSymbols.Count != 0 && FirstSymbols.Contains('{'))
+                    {
+                        //If it was equal to the top element of stack we will pop it
+                        FirstSymbols.Pop();
+                    }
+                    // If right symbol is encountered "]"
+                    else if (bulls_string10[i] == ']' && FirstSymbols.Count != 0 && FirstSymbols.Contains('['))
+                    {
+                        //If it was equal to the top element of stack we will pop it
+                        FirstSymbols.Pop();
+                    }
+                    // If none of the valid symbols is encountered
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+                //return false;
             }
             catch (Exception)
             {
                 throw;
             }
-
-
+            // This took me almost 2 hours to figure out (Remebered how to validate symbols using stack) This was a great practice with stacks and a good reminder
         }
 
 
@@ -393,8 +625,51 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-
-                return 0;
+                //Defining morse code array
+                string[] MorseCodes = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
+                //Defining alphabet array
+                //string[] Alphabets = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
+                char[] Alphabets = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+                string allthemors = "";
+                int Counter = 0;
+                //Checking
+                string result = string.Join(" ", words);
+                char[]Input = result.ToCharArray();
+                string[] MorseArray = new string[words.Length];
+                for(int i=0; i<words.Length;i++)
+                {
+                    foreach(char ch in words[i])
+                    {
+                        for (int j=0; j<26; j++)
+                        {
+                            if (ch == Alphabets[j])
+                            {
+                                allthemors += MorseCodes[j];
+                            }
+                        }
+                    }
+                    MorseArray[i] = allthemors;
+                    allthemors = string.Empty;
+                }
+                if (words.Length==1)
+                {
+                    Counter = 1;
+                }
+                else
+                {
+                    for (int i = 0; i < MorseArray.Length - 1; i++)
+                    {
+                        for (int j = i + 1; j < MorseArray.Length; j++)
+                        {
+                            if (MorseArray[i] == MorseArray[j])
+                            {
+                                Counter += 1;
+                            }
+                        }
+                    }
+                }
+               
+                return Counter;
             }
             catch (Exception)
             {
@@ -403,7 +678,7 @@ namespace ISM6225_Assignment_2_Spring_2022
 
         }
 
-      
+
 
 
         /*
@@ -434,7 +709,6 @@ namespace ISM6225_Assignment_2_Spring_2022
                 throw;
             }
         }
-
         /*
          
         Question 10:
@@ -461,7 +735,47 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-                return 0;
+                //Getting lenght of arrays
+                int len1 = word1.Length;
+                int len2 = word2.Length;
+
+                // Create a DP array to memoize result of previous computations
+                int[,] DP = new int[2, len1 + 1];
+
+
+                // Base condition when second String is empty then we remove all characters
+                for (int i = 0; i <= len1; i++)
+                    DP[0, i] = i;
+
+                // Start filling the DP This loop run for every character in second String
+                for (int i = 1; i <= len2; i++)
+                {
+
+                    // This loop compares the char fromsecond String with first String characters
+                    for (int j = 0; j <= len1; j++)
+                    {
+
+                        // if first String is empty then we have to perform add character operation to get second String
+                        if (j == 0)
+                            DP[i % 2, j] = i;
+
+                
+                        else if (word1[j - 1] == word2[i - 1])
+                        {
+                            DP[i % 2, j] = DP[(i - 1) % 2, j - 1];
+                        }
+
+                        // if character from both String is not same then we take the minimum from three specified operation
+                        else
+                        {
+                            DP[i % 2, j] = 1 + Math.Min(DP[(i - 1) % 2, j],
+                                                   Math.Min(DP[i % 2, j - 1],
+                                                       DP[(i - 1) % 2, j - 1]));
+                        }
+                    }
+                }
+                int res =DP[len2 % 2, len1];
+                return res;
 
             }
             catch (Exception)
@@ -470,5 +784,6 @@ namespace ISM6225_Assignment_2_Spring_2022
                 throw;
             }
         }
+        //This was a intresting question. forcing me out of my confert zone with C# took me hours to work it out
     }
 }
